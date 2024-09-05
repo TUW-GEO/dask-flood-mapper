@@ -1,0 +1,233 @@
+
+```{python}
+import pystac_client
+import folium
+from odc import stac as odc_stac
+import xarray as xr
+import numpy as np
+import datetime
+```
+
+## EODC catalog
+
+```{python}
+eodc_catalog = pystac_client.Client.open("https://stac.eodc.eu/api/v1")
+eodc_catalog
+```
+
+## Cube definitions
+
+```{python}
+crs = "EPSG:4326" # Coordinate Reference System - World Geodetic System 1984 (WGS84) in this case 
+res = 0.00018 # 20 meter in degree
+```
+
+## Northern Gemany Flood
+
+Storm Babet hit the Denmark and Northern coast at the 20th of October 2023 [Wikipedia](https://en.wikipedia.org/wiki/Storm_Babet).
+
+
+```{python}
+time_range = "2022-10-15/2022-10-22"
+minlon, maxlon = 12.3, 12.9
+minlat, maxlat = 54.4, 54.6
+bounding_box = [minlon, minlat, maxlon, maxlat]
+```
+
+## Microwave backscatter measurements
+
+```{python}
+collection_sig0 = "SENTINEL1_SIG0_20M"
+collection = eodc_catalog.get_collection(collection_sig0)
+collection
+```
+
+```{python}
+search = eodc_catalog.search(
+    collections=collection_sig0,
+    bbox=bounding_box,
+    datetime=time_range,
+)
+
+items_sig0 = search.item_collection()
+print(f"On EODC we found {len(items_sig0)} items for the given search query")
+items_sig0
+```
+
+```{python}
+scale = items_sig0[0].assets['VV'].extra_fields.get('raster:bands')[0]['scale'] # raster:bands is STAC raster extension
+nodata = items_sig0[0].assets['VV'].extra_fields.get('raster:bands')[0]['nodata']
+```
+
+```{python}
+bands = "VV"
+sig0_dc = odc_stac.load(items_sig0,
+                        bands=bands,
+                        crs=crs,
+                        chunks={'time':5},
+                        resolution=res,
+                        bbox=bounding_box,
+                        )
+sig0_dc = sig0_dc.where(sig0_dc != nodata) / scale
+sig0_dc
+```
+
+## Harmonic parameters
+
+```{python}
+collection_hpar = "SENTINEL1_HPAR"
+collection = eodc_catalog.get_collection(collection_hpar)
+collection
+```
+
+
+```{python}
+search = eodc_catalog.search(
+    collections=collection_hpar,
+    bbox=bounding_box
+)
+
+items_hpar = search.item_collection()
+print(f"On EODC we found {len(items_hpar)} items for the given search query")
+items_hpar
+```
+
+```{python}
+scale = items_hpar[0].assets['C1'].extra_fields.get('raster:bands')[0]['scale'] # raster:bands is STAC raster extension
+nodata = items_hpar[0].assets['C1'].extra_fields.get('raster:bands')[0]['nodata']
+```
+
+```{python}
+bands = ("C1", "C2", "C3", "M0", "S1", "S2", "S3", "STD", "NOBS")
+hpar_dc = odc_stac.load(items_hpar,
+                        bands=bands,
+                        crs=crs,
+                        resolution=res,
+                        bbox=bounding_box,
+                        ).\
+    rename_vars({"NOBS": "NOBS_HPAR"}).\
+    squeeze("time").\
+    drop_vars("time")
+hpar_dc = hpar_dc.where(hpar_dc != nodata) / scale
+hpar_dc
+```
+
+## Local Incidence Angles
+
+```{python}
+collection_plia = "SENTINEL1_MPLIA"
+collection = eodc_catalog.get_collection(collection_plia)
+collection
+```
+
+
+```{python}
+search = eodc_catalog.search(
+    collections=collection_plia,
+    bbox=bounding_box
+)
+
+items_plia = search.item_collection()
+print(f"On EODC we found {len(items_plia)} items for the given search query")
+items_plia
+```
+
+```{python}
+scale = items_plia[0].assets["MPLIA"].extra_fields.get('raster:bands')[0]['scale'] # raster:bands is STAC raster extension
+nodata = items_plia[0].assets["MPLIA"].extra_fields.get('raster:bands')[0]['nodata']
+```
+
+
+```{python}
+bands = ("MPLIA", "NOBS")
+plia_dc = odc_stac.load(items_plia,
+                        bands=bands,
+                        crs=crs,
+                        resolution=res,
+                        bbox=bounding_box,
+                        ).\
+    rename_vars({"NOBS": "NOBS_MPLIA"}).\
+    squeeze("time").\
+    drop_vars("time")
+plia_dc = plia_dc.where(plia_dc != nodata) / scale
+plia_dc
+```
+
+
+## Fuse cube
+
+
+```{python}
+flood_dc = xr.merge([sig0_dc, plia_dc, hpar_dc])
+```
+
+## Likelihoods
+
+### Water
+```{python}
+def calc_water_likelihood(dc):
+    return  dc.MPLIA * -0.394181 + -4.142015
+
+flood_dc["wbsc"] = calc_water_likelihood(flood_dc)
+```
+
+### Land
+
+```{python}
+def harmonic_expected_backscatter(dc, dtime_str="2018-01-01"):
+    w = np.pi * 2 / 365
+    dt = datetime.datetime.strptime(dtime_str, "%Y-%m-%d")
+    t = dt.timetuple().tm_yday
+    wt = w * t
+    print(f"data: {dc.shape}")
+    M0 = dc.M0
+    S1 = dc.S1
+    S2 = dc.S2
+    S3 = dc.S3
+    C1 = dc.C1
+    C2 = dc.C2
+    C3 = dc.C3
+    hm_c1 = (M0 + S1 * np.sin(wt)) + (C1 * np.cos(wt))
+    hm_c2 = ((hm_c1 + S2 * np.sin(2 * wt)) + C2 * np.cos(2 * wt))
+    hm_c3 = ((hm_c2 + S3 * np.sin(3 * wt)) + C3 * np.cos(3 * wt))
+    return hm_c3
+
+
+
+```
+
+```{python}
+# def harmonic_expected_backscatter(obj, dim):
+
+#     # note: apply always moves core dimensions to the end
+
+#     return xr.apply_ufunc(
+
+#         harmonic_expected_backscatter_, obj, input_core_dims=[[dim]], dask="allowed"
+
+#     )
+
+# harmonic_expected_backscatter(flood_dc, "time")
+
+harmonic_expected_backscatter(flood_dc)
+
+```
+
+
+## Flood mappingg
+
+```{python}
+def bayesian_flood_decision(water_likelihood, land_likelihood):
+    evidence = (water_likelihood * 0.5) + (land_likelihood * 0.5)
+    nf_post_prob = (water_likelihood * 0.5) / evidence
+    f_post_prob = (land_likelihood * 0.5) / evidence
+    return np.greater(f_post_prob, nf_post_prob)
+flood_dc["decision"] = bayesian_flood_decision(flood_dc.wbsc, flood_dc.hbsc)
+flood_dc
+```
+
+
+
+```{python}
+flood_dc.decision.plot()
+```
