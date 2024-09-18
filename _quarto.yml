@@ -1,0 +1,22 @@
+project:
+  type: book
+
+book:
+  title: "Dask Flood Mapper"
+  author: ""
+  date: "7/10/2024"
+  chapters:
+    - index.qmd
+    - notebooks/01_local_dask.ipynb
+  navbar: 
+    logo: assets/images/tuw-geo-logo.svg
+  sidebar:
+    logo: assets/images/tuw-geo-logo.svg
+
+format:
+  html:
+    theme: cosmo
+    title-block-banner: "#006699"
+    title-block-banner-color: white
+
+keep-ipynb: true
