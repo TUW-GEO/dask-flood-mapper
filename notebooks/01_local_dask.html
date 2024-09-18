@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Dask Flood Mapper - 1&nbsp; Dask Client</title>
+<title>Dask Flood Mapper - 1&nbsp; Dask Flood Mapper</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -178,7 +178,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_local_dask.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Client</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/01_local_dask.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Flood Mapper</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -188,7 +188,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Client</span></h1>
+      <h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Flood Mapper</span></h1>
                       </div>
   </div>
     
@@ -220,7 +220,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../notebooks/01_local_dask.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Client</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dask Flood Mapper</span></span></a>
   </div>
 </li>
     </ul>
@@ -851,314 +851,106 @@ if (window.Jupyter !== undefined) {
 </div>
 <p>We can then set the Dask Client, where we avoid inter-worker communication which is common for working with <code>numpy</code> and <code>xarray</code> in this case.</p>
 <div id="3639900a" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-<div>
-    <div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;"> </div>
-    <div style="margin-left: 48px;">
-        <h3 style="margin-bottom: 0px;" class="anchored">Client</h3>
-        <p style="color: #9D9D9D; margin-bottom: 0px;">Client-786bb6a7-75bd-11ef-8f9a-f780c6f503ec</p>
-        
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Connection method:</strong> Cluster object</td>
-<td style="text-align: left;"><strong>Cluster type:</strong> distributed.LocalCluster</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:8787/status" target="_blank">http://128.131.72.130:8787/status</a></td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table>
-<button style="margin-bottom: 12px;" data-commandlinker-command="dask:populate-and-launch-layout" data-commandlinker-args="{&quot;url&quot;: &quot;http://128.131.72.130:8787/status&quot; }">
-<p>Launch dashboard in JupyterLab</p>
-</button>
-<details>
-<summary style="margin-bottom: 20px;">
-<section id="cluster-info" class="level3" style="display: inline;" data-number="1.0.1">
-<h3 style="display: inline;" data-number="1.0.1" class="anchored" data-anchor-id="cluster-info"><span class="header-section-number">1.0.1</span> Cluster Info</h3>
-</section></summary>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-mod-trusted jp-OutputArea-output">
-<div style="width: 24px; height: 24px; background-color: #e1e1e1; border: 3px solid #9D9D9D; border-radius: 5px; position: absolute;">
-
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dask.distributed <span class="im">import</span> Client, wait</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> Client(processes<span class="op">=</span><span class="va">False</span>, threads_per_worker<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                n_workers<span class="op">=</span><span class="dv">3</span>, memory_limit<span class="op">=</span><span class="st">'28GB'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>client</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div style="margin-left: 48px;">
-<section id="localcluster" class="level3" style="margin-bottom: 0px; margin-top: 0px;" data-number="1.0.2">
-<h3 style="margin-bottom: 0px; margin-top: 0px;" data-number="1.0.2" class="anchored" data-anchor-id="localcluster"><span class="header-section-number">1.0.2</span> LocalCluster</h3>
-<p>97114163</p>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:8787/status" target="_blank">http://128.131.72.130:8787/status</a></td>
-<td style="text-align: left;"><strong>Workers:</strong> 3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Total threads:</strong> 6</td>
-<td style="text-align: left;"><strong>Total memory:</strong> 78.23 GiB</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Status:</strong> running</td>
-<td style="text-align: left;"><strong>Using processes:</strong> False</td>
-</tr>
-</tbody>
-</table>
-<details>
-<summary style="margin-bottom: 20px;">
-</summary></details></section>
-<section id="scheduler-info" class="level3" style="display: inline;" data-number="1.0.3">
-<h3 style="display: inline;" data-number="1.0.3" class="anchored" data-anchor-id="scheduler-info"><span class="header-section-number">1.0.3</span> Scheduler Info</h3>
-
-<div style="">
-<div>
-<div style="width: 24px; height: 24px; background-color: #FFF7E5; border: 3px solid #FF6132; border-radius: 5px; position: absolute;">
-
-</div>
-<section id="scheduler" class="level3" style="margin-bottom: 0px;" data-number="1.0.4">
-<h3 style="margin-bottom: 0px;" data-number="1.0.4" class="anchored" data-anchor-id="scheduler"><span class="header-section-number">1.0.4</span> Scheduler</h3>
-<p>Scheduler-8da346fa-b314-4b95-bd47-69dfcc188db6</p>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Comm:</strong> inproc://128.131.72.130/298906/1</td>
-<td style="text-align: left;"><strong>Workers:</strong> 3</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:8787/status" target="_blank">http://128.131.72.130:8787/status</a></td>
-<td style="text-align: left;"><strong>Total threads:</strong> 6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Started:</strong> Just now</td>
-<td style="text-align: left;"><strong>Total memory:</strong> 78.23 GiB</td>
-</tr>
-</tbody>
-</table>
-</section>
-</div>
-<details style="margin-left: 48px;">
-<summary style="margin-bottom: 20px;">
-<section id="workers" class="level3" style="display: inline;" data-number="1.0.5">
-<h3 style="display: inline;" data-number="1.0.5" class="anchored" data-anchor-id="workers"><span class="header-section-number">1.0.5</span> Workers</h3>
-</section></summary>
-<div style="margin-bottom: 20px;">
-<div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;">
-
-</div>
-<div style="margin-left: 48px;">
-<details>
-<summary>
-<section id="worker-0" class="level4" style="margin-bottom: 0px; display: inline;" data-number="1.0.5.1">
-<h4 style="margin-bottom: 0px; display: inline;" data-number="1.0.5.1" class="anchored" data-anchor-id="worker-0"><span class="header-section-number">1.0.5.1</span> Worker: 0</h4>
-</section></summary>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Comm:</strong> inproc://128.131.72.130/298906/4</td>
-<td style="text-align: left;"><strong>Total threads:</strong> 2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:34691/status" target="_blank">http://128.131.72.130:34691/status</a></td>
-<td style="text-align: left;"><strong>Memory:</strong> 26.08 GiB</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Nanny:</strong> None</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td colspan="2" style="text-align: left;"><strong>Local directory:</strong> /tmp/dask-scratch-space/worker-l9ekzuzd</td>
-</tr>
-</tbody>
-</table>
-</details>
-</div></div></details></div></section>
-</div>
-</div>
-<div style="margin-bottom: 20px;">
-<div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;">
-
-</div>
-<div style="margin-left: 48px;">
-<details>
-<summary>
-<section id="worker-1" class="level4" style="margin-bottom: 0px; display: inline;" data-number="1.0.5.2">
-<h4 style="margin-bottom: 0px; display: inline;" data-number="1.0.5.2" class="anchored" data-anchor-id="worker-1"><span class="header-section-number">1.0.5.2</span> Worker: 1</h4>
-</section></summary>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Comm:</strong> inproc://128.131.72.130/298906/5</td>
-<td style="text-align: left;"><strong>Total threads:</strong> 2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:40963/status" target="_blank">http://128.131.72.130:40963/status</a></td>
-<td style="text-align: left;"><strong>Memory:</strong> 26.08 GiB</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Nanny:</strong> None</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td colspan="2" style="text-align: left;"><strong>Local directory:</strong> /tmp/dask-scratch-space/worker-quur8k_l</td>
-</tr>
-</tbody>
-</table>
-</details>
-
-</div>
-</div>
-<div style="margin-bottom: 20px;">
-<div style="width: 24px; height: 24px; background-color: #DBF5FF; border: 3px solid #4CC9FF; border-radius: 5px; position: absolute;">
-
-</div>
-<div style="margin-left: 48px;">
-<details>
-<summary>
-<section id="worker-2" class="level4" style="margin-bottom: 0px; display: inline;" data-number="1.0.5.3">
-<h4 style="margin-bottom: 0px; display: inline;" data-number="1.0.5.3" class="anchored" data-anchor-id="worker-2"><span class="header-section-number">1.0.5.3</span> Worker: 2</h4>
-</section></summary>
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><strong>Comm:</strong> inproc://128.131.72.130/298906/6</td>
-<td style="text-align: left;"><strong>Total threads:</strong> 2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Dashboard:</strong> <a href="http://128.131.72.130:46733/status" target="_blank">http://128.131.72.130:46733/status</a></td>
-<td style="text-align: left;"><strong>Memory:</strong> 26.08 GiB</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Nanny:</strong> None</td>
-<td style="text-align: left;"></td>
-</tr>
-<tr class="even">
-<td colspan="2" style="text-align: left;"><strong>Local directory:</strong> /tmp/dask-scratch-space/worker-__h445_o</td>
-</tr>
-</tbody>
-</table>
-
-</details></div>
-</div>
-
-</details></div>
-
-</div>
-</div>
-
-            
-            </div>
-        </div>
-        
-
-    
-</main></div>
-
-        
-    
-
-            
-        
-
-    
-
-
-
-
-
 <p>In conjunction with setting up the Dask client I will chunk my arrays along three dimensions according to the following specifications for maximum performance on my setup.</p>
 <div id="f8bd5ca6" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>chunks <span class="op">=</span> {<span class="st">'time'</span>:<span class="dv">1</span>, <span class="st">"latitude"</span>: <span class="dv">1300</span>, <span class="st">"longitude"</span>: <span class="dv">1300</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>chunks <span class="op">=</span> {<span class="st">'time'</span>:<span class="dv">1</span>, <span class="st">"latitude"</span>: <span class="dv">1300</span>, <span class="st">"longitude"</span>: <span class="dv">1300</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="cube-definitions" class="level2" data-number="1.1">
-<h2 data-number="1.1" data-anchor-id="cube-definitions"><span class="header-section-number">1.1</span> Cube Definitions</h2>
+<h2 data-number="1.1" class="anchored" data-anchor-id="cube-definitions"><span class="header-section-number">1.1</span> Cube Definitions</h2>
 <p>The following generic specifications are used for presenting the data.</p>
 <div id="27eeb6f2" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> <span class="st">"EPSG:4326"</span> <span class="co"># Coordinate Reference System - World Geodetic System 1984 (WGS84) in this case </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="fl">0.00018</span> <span class="co"># 20 meter in degree</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>crs <span class="op">=</span> <span class="st">"EPSG:4326"</span> <span class="co"># Coordinate Reference System - World Geodetic System 1984 (WGS84) in this case </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> <span class="fl">0.00018</span> <span class="co"># 20 meter in degree</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="northern-germany-flood" class="level2" data-number="1.2">
-<h2 data-number="1.2" data-anchor-id="northern-germany-flood"><span class="header-section-number">1.2</span> Northern Germany Flood</h2>
+<h2 data-number="1.2" class="anchored" data-anchor-id="northern-germany-flood"><span class="header-section-number">1.2</span> Northern Germany Flood</h2>
 <p>Storm Babet hit the Denmark and Northern coast at the 20th of October 2023 <a href="https://en.wikipedia.org/wiki/Storm_Babet">Wikipedia</a>. Here an area around Zingst at the Baltic coast of Northern Germany is selected as the study area.</p>
 <div id="f5a7d8b4" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"2022-10-11/2022-10-25"</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>minlon, maxlon <span class="op">=</span> <span class="fl">12.3</span>, <span class="fl">13.1</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>minlat, maxlat <span class="op">=</span> <span class="fl">54.3</span>, <span class="fl">54.6</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>bounding_box <span class="op">=</span> [minlon, minlat, maxlon, maxlat]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>time_range <span class="op">=</span> <span class="st">"2022-10-11/2022-10-25"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>minlon, maxlon <span class="op">=</span> <span class="fl">12.3</span>, <span class="fl">13.1</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>minlat, maxlat <span class="op">=</span> <span class="fl">54.3</span>, <span class="fl">54.6</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>bounding_box <span class="op">=</span> [minlon, minlat, maxlon, maxlat]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="eodc-stac-catalog" class="level2" data-number="1.3">
-<h2 data-number="1.3" data-anchor-id="eodc-stac-catalog"><span class="header-section-number">1.3</span> EODC STAC Catalog</h2>
+<h2 data-number="1.3" class="anchored" data-anchor-id="eodc-stac-catalog"><span class="header-section-number">1.3</span> EODC STAC Catalog</h2>
 <p>The <code>pystac_client</code> establishes a connection to the EODC STAC Catalog. This results in a catalog object that can be used to discover collections and items hosted at EODC.</p>
 <div id="cb7eed4c" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>eodc_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">"https://stac.eodc.eu/api/v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>eodc_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">"https://stac.eodc.eu/api/v1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="microwave-backscatter-measurements" class="level2" data-number="1.4">
-<h2 data-number="1.4" data-anchor-id="microwave-backscatter-measurements"><span class="header-section-number">1.4</span> Microwave Backscatter Measurements</h2>
+<h2 data-number="1.4" class="anchored" data-anchor-id="microwave-backscatter-measurements"><span class="header-section-number">1.4</span> Microwave Backscatter Measurements</h2>
 <p>The basic premise of microwave-based backscattering can be seen in the sketch below, the characteristics of backscattering over land and water differ considerably. With this knowledge we can detect whenever a pixel with a predominant land like signature changes to a water like signature in the event of flooding.</p>
 <p><img src="https://www.gsi.ie/images/images/SAR_mapping_land_water.jpg" class="img-fluid"></p>
 <p><em>Schematic backscattering over land and water. Image from <a href="https://www.gsi.ie/images/images/SAR_mapping_land_water.jpg">Geological Survey Ireland</a></em></p>
 <p>We discover Sentinel-1 microwave backscatter (<span class="math inline">\(\sigma_0\)</span> [1]) at a 20 meter resolution, like so:</p>
 <div id="d24f790f" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_SIG0_20M"</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span>time_range,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>items_sig0 <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_SIG0_20M"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    datetime<span class="op">=</span>time_range,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>items_sig0 <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The state of the orbit and relative orbit number is also saved, as the water and land likelihoods (which are calculated later on) dependent on the orbital configuration. These variables will be added as additional coordinates to the data cube. For this purpose a small helper function is defined, like so:</p>
 <div id="0bb76591" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_orbit_names(items):</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([items[i].properties[<span class="st">"sat:orbit_state"</span>][<span class="dv">0</span>].upper() <span class="op">+</span> <span class="op">\</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                     <span class="bu">str</span>(items[i].properties[<span class="st">"sat:relative_orbit"</span>]) <span class="op">\</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                     <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(items))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_orbit_names(items):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array([items[i].properties[<span class="st">"sat:orbit_state"</span>][<span class="dv">0</span>].upper() <span class="op">+</span> <span class="op">\</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                     <span class="bu">str</span>(items[i].properties[<span class="st">"sat:relative_orbit"</span>]) <span class="op">\</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                     <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(items))])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We will also save the scaling factor and nodata values of STAC items to correct the loaded data accordingly. Again a helper function will be used to correctly scale and fill no data values of the cube.</p>
 <div id="f2de75e2" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_process_eodc_cube(dc: xr.Dataset, items, bands):</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(bands, <span class="bu">tuple</span>):</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        bands <span class="op">=</span> <span class="bu">tuple</span>([bands])</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> bands:</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        dc[i] <span class="op">=</span> post_process_eodc_cube_(dc[i], items, i)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dc</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_process_eodc_cube_(dc: xr.Dataset, items, band):</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> items[<span class="dv">0</span>].assets[band].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'scale'</span>]</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    nodata <span class="op">=</span> items[<span class="dv">0</span>].assets[band].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'nodata'</span>]</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dc.where(dc <span class="op">!=</span> nodata) <span class="op">/</span> scale</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_process_eodc_cube(dc: xr.Dataset, items, bands):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(bands, <span class="bu">tuple</span>):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        bands <span class="op">=</span> <span class="bu">tuple</span>([bands])</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> bands:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        dc[i] <span class="op">=</span> post_process_eodc_cube_(dc[i], items, i)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dc</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_process_eodc_cube_(dc: xr.Dataset, items, band):</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> items[<span class="dv">0</span>].assets[band].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'scale'</span>]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    nodata <span class="op">=</span> items[<span class="dv">0</span>].assets[band].extra_fields.get(<span class="st">'raster:bands'</span>)[<span class="dv">0</span>][<span class="st">'nodata'</span>]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dc.where(dc <span class="op">!=</span> nodata) <span class="op">/</span> scale</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The VV polarization of the discover items can be loaded with <code>odc-stac</code> and cast in the desired projection and resolution. The data is at this point only lazily loaded, meaning that we only make an instance of the outlines of the datacube with the proper shape and resolution, but without actually loading all the data. This is done by providing the chunks as defined before, which partitions the data in portions which are more easily handled by the setup used for processing the data (in this case my own pc).</p>
 <div id="6e5f655a" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc_stac.load(items_sig0,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"VV"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> odc_stac.load(items_sig0,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can rescale our variable, fill the no data values with <code>np.nan</code> values, and add the orbit names, with the previous defined functions.</p>
 <div id="023e72ff" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> post_process_eodc_cube(sig0_dc, items_sig0, bands).<span class="op">\</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    rename_vars({ <span class="st">"VV"</span>: <span class="st">"sig0"</span>}).<span class="op">\</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    assign_coords(orbit<span class="op">=</span>(<span class="st">"time"</span>, extract_orbit_names(items_sig0))).<span class="op">\</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    dropna(dim<span class="op">=</span><span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>).<span class="op">\</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    sortby(<span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> post_process_eodc_cube(sig0_dc, items_sig0, bands).<span class="op">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    rename_vars({ <span class="st">"VV"</span>: <span class="st">"sig0"</span>}).<span class="op">\</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    assign_coords(orbit<span class="op">=</span>(<span class="st">"time"</span>, extract_orbit_names(items_sig0))).<span class="op">\</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    dropna(dim<span class="op">=</span><span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>).<span class="op">\</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    sortby(<span class="st">"time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we remove duplicate time dimensions from the data cube and extract the orbit names as we will need those for obtaining the correct harmonic parameters and local incidence angles,as explained in the next section. Also, note, that we call <code>dask.persist</code> to materialize the object but retain it as a delayed object in the workers memory.</p>
 <div id="dd2674bc" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>__, indices <span class="op">=</span> np.unique(sig0_dc.time, return_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>indices.sort()</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>orbit_sig0 <span class="op">=</span> sig0_dc.orbit[indices].data</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.groupby(<span class="st">"time"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.assign_coords(orbit<span class="op">=</span>(<span class="st">"time"</span>, orbit_sig0))</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.persist()</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>wait(sig0_dc)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>sig0_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>__, indices <span class="op">=</span> np.unique(sig0_dc.time, return_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>indices.sort()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>orbit_sig0 <span class="op">=</span> sig0_dc.orbit[indices].data</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.groupby(<span class="st">"time"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.assign_coords(orbit<span class="op">=</span>(<span class="st">"time"</span>, orbit_sig0))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>sig0_dc <span class="op">=</span> sig0_dc.persist()</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>wait(sig0_dc)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>sig0_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -1615,40 +1407,40 @@ Data variables:
 </div>
 </section>
 <section id="harmonic-parameters" class="level2" data-number="1.5">
-<h2 data-number="1.5" data-anchor-id="harmonic-parameters"><span class="header-section-number">1.5</span> Harmonic Parameters</h2>
+<h2 data-number="1.5" class="anchored" data-anchor-id="harmonic-parameters"><span class="header-section-number">1.5</span> Harmonic Parameters</h2>
 <p>The so-called likelihoods of <span class="math inline">\(P(\sigma^0|flood)\)</span> and <span class="math inline">\(P(\sigma^0|nonflood)\)</span> can be calculated from past backscattering information. To be able to this we load the harmonic parameters we can model the expected variations in land back scattering based on seasonal changes in vegetation. The procedure is similar to the backscattering routine.</p>
 <p>We discover items.</p>
 <div id="ecabe307" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_HPAR"</span>,</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>items_hpar <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_HPAR"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>items_hpar <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load the data as a lazy object.</p>
 <div id="ed8ebfd9" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> (<span class="st">"C1"</span>, <span class="st">"C2"</span>, <span class="st">"C3"</span>, <span class="st">"M0"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>, <span class="st">"S3"</span>, <span class="st">"STD"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> odc_stac.load(items_hpar,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                        )</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> post_process_eodc_cube(hpar_dc, items_hpar, bands).<span class="op">\</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"time"</span>: <span class="st">"orbit"</span>})</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>hpar_dc[<span class="st">"orbit"</span>] <span class="op">=</span> extract_orbit_names(items_hpar)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.groupby(<span class="st">"orbit"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> (<span class="st">"C1"</span>, <span class="st">"C2"</span>, <span class="st">"C3"</span>, <span class="st">"M0"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>, <span class="st">"S3"</span>, <span class="st">"STD"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> odc_stac.load(items_hpar,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> post_process_eodc_cube(hpar_dc, items_hpar, bands).<span class="op">\</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"time"</span>: <span class="st">"orbit"</span>})</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>hpar_dc[<span class="st">"orbit"</span>] <span class="op">=</span> extract_orbit_names(items_hpar)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.groupby(<span class="st">"orbit"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We expand the variables along the orbits of sigma naught to be able to calculate the correct land reference backscatter signatures.</p>
 <div id="f23050ec" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.sel(orbit <span class="op">=</span> orbit_sig0)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.persist()</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>wait(hpar_dc)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>hpar_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.sel(orbit <span class="op">=</span> orbit_sig0)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>hpar_dc <span class="op">=</span> hpar_dc.persist()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>wait(hpar_dc)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>hpar_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -2619,42 +2411,42 @@ dask.array&lt;chunksize=(1, 1300, 1300), meta=np.ndarray&gt;
       dtype='float64', name='longitude', length=4445))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>orbit</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-eedfb7da-886b-4d7c-8860-c38405d50ecb" class="xr-index-data-in" type="checkbox"><label for="index-eedfb7da-886b-4d7c-8860-c38405d50ecb" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index(['D168', 'A44', 'A44', 'D66', 'D95', 'A146', 'A146', 'D168'], dtype='object', name='orbit'))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-7231173b-e4ac-4e81-9598-9d0dcdb223cf" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-7231173b-e4ac-4e81-9598-9d0dcdb223cf" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></div></div>
 </div>
 </div>
+</section></main></div>
 
-</section>
 <section id="local-incidence-angles" class="level2" data-number="1.6">
 <h2 data-number="1.6" data-anchor-id="local-incidence-angles"><span class="header-section-number">1.6</span> Local Incidence Angles</h2>
 <p>Local incidence angles of measured microwave backscattering is as well important for calculating reference backscatter values, but now for water bodies. The procedure is much the same as for the harmonic parameters.</p>
 <div id="c5592a53" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_MPLIA"</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>items_plia <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> eodc_catalog.search(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span><span class="st">"SENTINEL1_MPLIA"</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>items_plia <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load the lazy object and preprocess.</p>
 <div id="cd5f428d" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"MPLIA"</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> odc_stac.load(items_plia,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                        )</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> post_process_eodc_cube(plia_dc, items_plia, bands).<span class="op">\</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"time"</span>: <span class="st">"orbit"</span>})</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>plia_dc[<span class="st">"orbit"</span>] <span class="op">=</span> extract_orbit_names(items_plia)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.groupby(<span class="st">"orbit"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>bands <span class="op">=</span> <span class="st">"MPLIA"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> odc_stac.load(items_plia,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                        bands<span class="op">=</span>bands,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                        groupby<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                        )</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> post_process_eodc_cube(plia_dc, items_plia, bands).<span class="op">\</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"time"</span>: <span class="st">"orbit"</span>})</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>plia_dc[<span class="st">"orbit"</span>] <span class="op">=</span> extract_orbit_names(items_plia)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.groupby(<span class="st">"orbit"</span>).mean(skipna<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We expand the variables along the orbits of sigma naught to be able to calculate the correct land reference backscatter signatures.</p>
 <div id="224f2945" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.sel(orbit <span class="op">=</span> orbit_sig0)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.persist()</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>wait(plia_dc)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>plia_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.sel(orbit <span class="op">=</span> orbit_sig0)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>plia_dc <span class="op">=</span> plia_dc.persist()</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>wait(plia_dc)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plia_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -3105,33 +2897,33 @@ Data variables:
 <h2 data-number="1.7" data-anchor-id="esa-world-cover-from-terrascope"><span class="header-section-number">1.7</span> ESA World Cover from Terrascope</h2>
 <p>For flood mapping we are only interested in microwave backscattering over what used to be land, as such, we need a way to mask water bodies. For this we use the ESA World Cover data from the following STAC catalog.</p>
 <div id="982c9e1f" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">'AWS_NO_SIGN_REQUEST'</span>] <span class="op">=</span> <span class="st">'YES'</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>wcover_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">'https://services.terrascope.be/stac/'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>os.environ[<span class="st">'AWS_NO_SIGN_REQUEST'</span>] <span class="op">=</span> <span class="st">'YES'</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>wcover_catalog <span class="op">=</span> pystac_client.Client.<span class="bu">open</span>(<span class="st">'https://services.terrascope.be/stac/'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similarly, we discover the required items.</p>
 <div id="4df8d2a3" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> wcover_catalog.search(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span> <span class="st">"urn:eop:VITO:ESA_WorldCover_10m_2021_AWS_V2"</span>,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>items_wcover <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>search <span class="op">=</span> wcover_catalog.search(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    collections<span class="op">=</span> <span class="st">"urn:eop:VITO:ESA_WorldCover_10m_2021_AWS_V2"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    bbox<span class="op">=</span>bounding_box</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>items_wcover <span class="op">=</span> search.item_collection()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Load the data lazily.</p>
 <div id="dc76e128" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>wcover_dc <span class="op">=</span> odc_stac.load(items_wcover,</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                       ).<span class="op">\</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    squeeze(<span class="st">"time"</span>).<span class="op">\</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    drop_vars(<span class="st">"time"</span>).<span class="op">\</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    rename_vars({<span class="st">"ESA_WORLDCOVER_10M_MAP"</span>: <span class="st">"wcover"</span>})</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>wcover_dc <span class="op">=</span> wcover_dc.persist()</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>wait(wcover_dc)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>wcover_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wcover_dc <span class="op">=</span> odc_stac.load(items_wcover,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                        crs<span class="op">=</span>crs,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                        chunks<span class="op">=</span>chunks,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                        resolution<span class="op">=</span>res,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                        bbox<span class="op">=</span>bounding_box,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                       ).<span class="op">\</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    squeeze(<span class="st">"time"</span>).<span class="op">\</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    drop_vars(<span class="st">"time"</span>).<span class="op">\</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    rename_vars({<span class="st">"ESA_WORLDCOVER_10M_MAP"</span>: <span class="st">"wcover"</span>})</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>wcover_dc <span class="op">=</span> wcover_dc.persist()</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>wait(wcover_dc)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>wcover_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -3580,15 +3372,15 @@ Data variables:
 <h2 data-number="1.8" data-anchor-id="fuse-cube"><span class="header-section-number">1.8</span> Fuse cube</h2>
 <p>Here we fuse the four data cubes together and filter for the values that have a HAND value of above zero. We can now drop the obit coordinates as well as time slices which contain no land backscattering data.</p>
 <div id="e18d7992" class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> xr.merge([sig0_dc, plia_dc, hpar_dc, wcover_dc])</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.where(flood_dc.wcover <span class="op">!=</span> <span class="dv">80</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.<span class="op">\</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    reset_index(<span class="st">"orbit"</span>, drop<span class="op">=</span><span class="va">True</span>).<span class="op">\</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"orbit"</span>: <span class="st">"time"</span>}).<span class="op">\</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    dropna(dim<span class="op">=</span><span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>, subset<span class="op">=</span>[<span class="st">"sig0"</span>])</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.persist()</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>wait(flood_dc)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>flood_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> xr.merge([sig0_dc, plia_dc, hpar_dc, wcover_dc])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.where(flood_dc.wcover <span class="op">!=</span> <span class="dv">80</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.<span class="op">\</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    reset_index(<span class="st">"orbit"</span>, drop<span class="op">=</span><span class="va">True</span>).<span class="op">\</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    rename({<span class="st">"orbit"</span>: <span class="st">"time"</span>}).<span class="op">\</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    dropna(dim<span class="op">=</span><span class="st">"time"</span>, how<span class="op">=</span><span class="st">"all"</span>, subset<span class="op">=</span>[<span class="st">"sig0"</span>])</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>flood_dc <span class="op">=</span> flood_dc.persist()</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>wait(flood_dc)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>flood_dc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -4798,37 +4590,37 @@ dask.array&lt;chunksize=(1300, 1300), meta=np.ndarray&gt;
 <h3 data-number="1.9.1" data-anchor-id="water"><span class="header-section-number">1.9.1</span> Water</h3>
 <p>We start with water which is the simplest calculation, where the hard coded values are coefficients of a regression model fitted to global water backscattering values.</p>
 <div id="ad1fe5d4" class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_water_likelihood(dc):</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  dc.MPLIA <span class="op">*</span> <span class="op">-</span><span class="fl">0.394181</span> <span class="op">+</span> <span class="op">-</span><span class="fl">4.142015</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_water_likelihood(dc):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  dc.MPLIA <span class="op">*</span> <span class="op">-</span><span class="fl">0.394181</span> <span class="op">+</span> <span class="op">-</span><span class="fl">4.142015</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="2db1e4c0" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>flood_dc[<span class="st">"wbsc"</span>] <span class="op">=</span> calc_water_likelihood(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>flood_dc[<span class="st">"wbsc"</span>] <span class="op">=</span> calc_water_likelihood(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="land" class="level3" data-number="1.9.2">
 <h3 data-number="1.9.2" data-anchor-id="land"><span class="header-section-number">1.9.2</span> Land</h3>
 <p>For land backscattering we construct the harmonic model from the parameters as contained in the fused data cube. By doing so, we obtain a reference land backscattering value to which to compare our actual observed sigma naught values.</p>
 <div id="8f9777eb" class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> harmonic_expected_backscatter(dc):</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.pi <span class="op">*</span> <span class="dv">2</span> <span class="op">/</span> <span class="dv">365</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> dc.time.dt.dayofyear</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    wt <span class="op">=</span> w <span class="op">*</span> t</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    M0 <span class="op">=</span> dc.M0</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    S1 <span class="op">=</span> dc.S1</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    S2 <span class="op">=</span> dc.S2</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    S3 <span class="op">=</span> dc.S3</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    C1 <span class="op">=</span> dc.C1</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    C2 <span class="op">=</span> dc.C2</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    C3 <span class="op">=</span> dc.C3</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    hm_c1 <span class="op">=</span> (M0 <span class="op">+</span> S1 <span class="op">*</span> np.sin(wt)) <span class="op">+</span> (C1 <span class="op">*</span> np.cos(wt))</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    hm_c2 <span class="op">=</span> ((hm_c1 <span class="op">+</span> S2 <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> wt)) <span class="op">+</span> C2 <span class="op">*</span> np.cos(<span class="dv">2</span> <span class="op">*</span> wt))</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    hm_c3 <span class="op">=</span> ((hm_c2 <span class="op">+</span> S3 <span class="op">*</span> np.sin(<span class="dv">3</span> <span class="op">*</span> wt)) <span class="op">+</span> C3 <span class="op">*</span> np.cos(<span class="dv">3</span> <span class="op">*</span> wt))</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hm_c3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> harmonic_expected_backscatter(dc):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> np.pi <span class="op">*</span> <span class="dv">2</span> <span class="op">/</span> <span class="dv">365</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> dc.time.dt.dayofyear</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    wt <span class="op">=</span> w <span class="op">*</span> t</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    M0 <span class="op">=</span> dc.M0</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    S1 <span class="op">=</span> dc.S1</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    S2 <span class="op">=</span> dc.S2</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    S3 <span class="op">=</span> dc.S3</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    C1 <span class="op">=</span> dc.C1</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    C2 <span class="op">=</span> dc.C2</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    C3 <span class="op">=</span> dc.C3</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    hm_c1 <span class="op">=</span> (M0 <span class="op">+</span> S1 <span class="op">*</span> np.sin(wt)) <span class="op">+</span> (C1 <span class="op">*</span> np.cos(wt))</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    hm_c2 <span class="op">=</span> ((hm_c1 <span class="op">+</span> S2 <span class="op">*</span> np.sin(<span class="dv">2</span> <span class="op">*</span> wt)) <span class="op">+</span> C2 <span class="op">*</span> np.cos(<span class="dv">2</span> <span class="op">*</span> wt))</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    hm_c3 <span class="op">=</span> ((hm_c2 <span class="op">+</span> S3 <span class="op">*</span> np.sin(<span class="dv">3</span> <span class="op">*</span> wt)) <span class="op">+</span> C3 <span class="op">*</span> np.cos(<span class="dv">3</span> <span class="op">*</span> wt))</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hm_c3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="0a4eb9a6" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>flood_dc[<span class="st">"hbsc"</span>] <span class="op">=</span> harmonic_expected_backscatter(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>flood_dc[<span class="st">"hbsc"</span>] <span class="op">=</span> harmonic_expected_backscatter(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -4838,27 +4630,27 @@ dask.array&lt;chunksize=(1300, 1300), meta=np.ndarray&gt;
 <p>Let’s say that our best estimate for the chance of flooding versus non-flooding of a pixel is 50-50: a coin flip. We now can also calculate the probability of backscattering <span class="math inline">\(P(\sigma^0)\)</span>, as the weighted average of the water and land likelihoods, ensuring that our posteriors range between 0 to 1.</p>
 <p>The following code block shows how we calculate the priors which allow use to predict whether it is likely if a land pixel became flooded.</p>
 <div id="5d6c33f2" class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bayesian_flood_decision(dc):</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    nf_std <span class="op">=</span> <span class="fl">2.754041</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    sig0 <span class="op">=</span> dc.sig0</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    std <span class="op">=</span> dc.STD</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    wbsc <span class="op">=</span> dc.wbsc</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    hbsc <span class="op">=</span> dc.hbsc</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    f_prob <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> (std <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi))) <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> <span class="op">\</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>        (((sig0 <span class="op">-</span> wbsc) <span class="op">/</span> nf_std) <span class="op">**</span> <span class="dv">2</span>))</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    nf_prob <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> (nf_std <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi))) <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> <span class="op">\</span></span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        (((sig0 <span class="op">-</span> hbsc) <span class="op">/</span> nf_std) <span class="op">**</span> <span class="dv">2</span>))</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    evidence <span class="op">=</span> (nf_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">+</span> (f_prob <span class="op">*</span> <span class="fl">0.5</span>)</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    nf_post_prob <span class="op">=</span> (nf_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">/</span> evidence</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    f_post_prob <span class="op">=</span> (f_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">/</span> evidence</span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    decision <span class="op">=</span> xr.where(np.isnan(f_post_prob) <span class="op">|</span> np.isnan(nf_post_prob), np.nan, np.greater(f_post_prob, nf_post_prob))</span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nf_post_prob, f_post_prob, decision</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bayesian_flood_decision(dc):</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    nf_std <span class="op">=</span> <span class="fl">2.754041</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    sig0 <span class="op">=</span> dc.sig0</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    std <span class="op">=</span> dc.STD</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    wbsc <span class="op">=</span> dc.wbsc</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    hbsc <span class="op">=</span> dc.hbsc</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    f_prob <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> (std <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi))) <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> <span class="op">\</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        (((sig0 <span class="op">-</span> wbsc) <span class="op">/</span> nf_std) <span class="op">**</span> <span class="dv">2</span>))</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    nf_prob <span class="op">=</span> (<span class="fl">1.0</span> <span class="op">/</span> (nf_std <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi))) <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> <span class="op">\</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        (((sig0 <span class="op">-</span> hbsc) <span class="op">/</span> nf_std) <span class="op">**</span> <span class="dv">2</span>))</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    evidence <span class="op">=</span> (nf_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">+</span> (f_prob <span class="op">*</span> <span class="fl">0.5</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    nf_post_prob <span class="op">=</span> (nf_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">/</span> evidence</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    f_post_prob <span class="op">=</span> (f_prob <span class="op">*</span> <span class="fl">0.5</span>) <span class="op">/</span> evidence</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    decision <span class="op">=</span> xr.where(np.isnan(f_post_prob) <span class="op">|</span> np.isnan(nf_post_prob), np.nan, np.greater(f_post_prob, nf_post_prob))</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nf_post_prob, f_post_prob, decision</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="5bfbe4a9" class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>flood_dc[[<span class="st">"nf_post_prob"</span>, <span class="st">"f_post_prob"</span>, <span class="st">"decision"</span>]] <span class="op">=</span> bayesian_flood_decision(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>flood_dc[[<span class="st">"nf_post_prob"</span>, <span class="st">"f_post_prob"</span>, <span class="st">"decision"</span>]] <span class="op">=</span> bayesian_flood_decision(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="postprocessing" class="level2" data-number="1.11">
@@ -4866,28 +4658,28 @@ dask.array&lt;chunksize=(1300, 1300), meta=np.ndarray&gt;
 <p>We continue by improving our flood map by filtering out observations that we expect to have low sensitivity to flooding based on a predefined set of criteria.</p>
 <p>These criteria include: * Masking of Exceeding Incidence Angles * Identification of Conflicting Distributions * Removal of Measurement Outliers * Denial of High Uncertainty on Decision</p>
 <div id="d1aa0a68" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_processing(dc):</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> np.logical_and(dc.MPLIA <span class="op">&gt;=</span> <span class="dv">27</span>, dc.MPLIA <span class="op">&lt;=</span> <span class="dv">48</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> (dc.hbsc <span class="op">&gt;</span> (dc.wbsc <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2.754041</span>))</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    land_bsc_lower <span class="op">=</span> dc.hbsc <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> dc.STD</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    land_bsc_upper <span class="op">=</span> dc.hbsc <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> dc.STD</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    water_bsc_upper <span class="op">=</span> dc.wbsc <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> <span class="fl">2.754041</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    mask_land_outliers <span class="op">=</span> np.logical_and(dc.sig0 <span class="op">&gt;</span> land_bsc_lower, dc.sig0 <span class="op">&lt;</span> land_bsc_upper)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    mask_water_outliers <span class="op">=</span> dc.sig0 <span class="op">&lt;</span> water_bsc_upper</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> (mask_land_outliers <span class="op">|</span> mask_water_outliers)</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  (dc <span class="op">*</span> (dc.f_post_prob <span class="op">&gt;</span> <span class="fl">0.8</span>)).decision</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> post_processing(dc):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> np.logical_and(dc.MPLIA <span class="op">&gt;=</span> <span class="dv">27</span>, dc.MPLIA <span class="op">&lt;=</span> <span class="dv">48</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> (dc.hbsc <span class="op">&gt;</span> (dc.wbsc <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="fl">2.754041</span>))</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    land_bsc_lower <span class="op">=</span> dc.hbsc <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> dc.STD</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    land_bsc_upper <span class="op">=</span> dc.hbsc <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> dc.STD</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    water_bsc_upper <span class="op">=</span> dc.wbsc <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> <span class="fl">2.754041</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    mask_land_outliers <span class="op">=</span> np.logical_and(dc.sig0 <span class="op">&gt;</span> land_bsc_lower, dc.sig0 <span class="op">&lt;</span> land_bsc_upper)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    mask_water_outliers <span class="op">=</span> dc.sig0 <span class="op">&lt;</span> water_bsc_upper</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    dc <span class="op">=</span> dc <span class="op">*</span> (mask_land_outliers <span class="op">|</span> mask_water_outliers)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>  (dc <span class="op">*</span> (dc.f_post_prob <span class="op">&gt;</span> <span class="fl">0.8</span>)).decision</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="9f178029" class="cell" data-execution_count="31">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>flood_output <span class="op">=</span> post_processing(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>flood_output <span class="op">=</span> post_processing(flood_dc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="removal-of-speckles" class="level2" data-number="1.12">
 <h2 data-number="1.12" data-anchor-id="removal-of-speckles"><span class="header-section-number">1.12</span> Removal of Speckles</h2>
 <p>The following step is designed to further improve the clarity of the floodmaps. These filters do not directly relate to prior knowledge on backscattering, but consists of contextual evidence that supports, or oppose, a flood classification. This mainly targets so-called speckles. These speckles are areas of one or a few pixels, and which are likely the result of the diversity of scattering surfaces at a sub-pixel level. In this approach it is argued that small, solitary flood surfaces are unlikely. Hence speckles are removed by applying a smoothing filter which consists of a rolling window median along the x and y-axis simultaneously.</p>
 <div id="64bef83c" class="cell" data-execution_count="32">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>flood_output <span class="op">=</span> flood_output.rolling({<span class="st">"longitude"</span>: <span class="dv">5</span>, <span class="st">"latitude"</span>: <span class="dv">5</span>}, center<span class="op">=</span><span class="va">True</span>).median(skipna<span class="op">=</span><span class="va">True</span>).persist()</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>wait(flood_output)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>flood_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>flood_output <span class="op">=</span> flood_output.rolling({<span class="st">"longitude"</span>: <span class="dv">5</span>, <span class="st">"latitude"</span>: <span class="dv">5</span>}, center<span class="op">=</span><span class="va">True</span>).median(skipna<span class="op">=</span><span class="va">True</span>).persist()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>wait(flood_output)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>flood_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <div>
 <div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
@@ -5341,7 +5133,7 @@ Coordinates:
 <h2 data-number="1.13" data-anchor-id="results"><span class="header-section-number">1.13</span> Results</h2>
 <p>We are now ready to visualize our results.</p>
 <div id="b9c04941" class="cell" data-execution_count="33">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>flood_output.plot(col<span class="op">=</span><span class="st">"time"</span>, col_wrap<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>flood_output.plot(col<span class="op">=</span><span class="st">"time"</span>, col_wrap<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -5352,9 +5144,9 @@ Coordinates:
 </div>
 <p>In the following graphic we superimpose the data on a map and we can move the slider to see which areas become flooded over time.</p>
 <div id="3093fa4e" class="cell" data-execution_count="34">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>flood_output.hvplot.quadmesh(x<span class="op">=</span><span class="st">'longitude'</span>, y<span class="op">=</span><span class="st">'latitude'</span>, geo<span class="op">=</span><span class="va">True</span>, widget_location<span class="op">=</span><span class="st">'bottom'</span>, rasterize<span class="op">=</span><span class="va">True</span>, <span class="op">\</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                            project<span class="op">=</span><span class="va">True</span>, clim<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>), cmap<span class="op">=</span>[<span class="st">"rgba(0, 0, 1, 0.1)"</span>,<span class="st">"darkred"</span>], tiles<span class="op">=</span><span class="va">True</span>, <span class="op">\</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                            clabel<span class="op">=</span><span class="st">"        non-flood                                        flood"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>flood_output.hvplot.quadmesh(x<span class="op">=</span><span class="st">'longitude'</span>, y<span class="op">=</span><span class="st">'latitude'</span>, geo<span class="op">=</span><span class="va">True</span>, widget_location<span class="op">=</span><span class="st">'bottom'</span>, rasterize<span class="op">=</span><span class="va">True</span>, <span class="op">\</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                            project<span class="op">=</span><span class="va">True</span>, clim<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>), cmap<span class="op">=</span>[<span class="st">"rgba(0, 0, 1, 0.1)"</span>,<span class="st">"darkred"</span>], tiles<span class="op">=</span><span class="va">True</span>, <span class="op">\</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                            clabel<span class="op">=</span><span class="st">"        non-flood                                        flood"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 
 </div>
