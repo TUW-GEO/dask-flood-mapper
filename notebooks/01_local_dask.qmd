@@ -150,7 +150,7 @@ wait(sig0_dc)
 sig0_dc
 ```
 
-## Harmonic parameters
+## Harmonic Parameters
 
 The so-called likelihoods of $P(\sigma^0|flood)$ and $P(\sigma^0|nonflood)$ can be calculated from past backscattering information. To be able to this we load the harmonic parameters we can model the expected variations in land back scattering based on seasonal changes in vegetation. The procedure is similar to the backscattering routine.
 
@@ -236,43 +236,44 @@ wait(plia_dc)
 plia_dc
 ```
 
-## Height Above Nearest Drainage Point from Alaska Satellite Facility
+## ESA World Cover from Terrascope
 
-For flood mapping we are only interested in microwave backscattering over what used to be land, as such, we need a way to mask water bodies. For this we use the Height Above Nearest Drainage Point (HAND) from the following Stac catalog.
+For flood mapping we are only interested in microwave backscattering over what used to be land, as such, we need a way to mask water bodies. For this we use the ESA World Cover data from the following STAC catalog.
 
 ```{python}
-cop_alaska_catalog = pystac_client.Client.open("https://stac.asf.alaska.edu/")
-cop_alaska_catalog
+import os
+os.environ['AWS_NO_SIGN_REQUEST'] = 'YES'
+wcover_catalog = pystac_client.Client.open('https://services.terrascope.be/stac/')
+wcover_catalog
 ```
 
 Similarly, we discover the required items.
 
 ```{python}
-search = cop_alaska_catalog.search(
-    collections= "glo-30-hand",
+search = wcover_catalog.search(
+    collections= "urn:eop:VITO:ESA_WorldCover_10m_2021_AWS_V2",
     bbox=bounding_box
 )
 
-items_dem = search.item_collection()
-items_dem
+items_wcover = search.item_collection()
+items_wcover
 ```
 
 Load the data lazily.
 
 ```{python}
-hand_dc = odc_stac.load(items_dem,
+wcover_dc = odc_stac.load(items_wcover,
                         crs=crs,
                         chunks=chunks,
                         resolution=res,
                         bbox=bounding_box,
-                        resampling="bilinear",
                        ).\
     squeeze("time").\
     drop_vars("time").\
-    rename_vars({"data": "hand"})
-hand_dc = hand_dc.persist()
-wait(hand_dc)
-hand_dc
+    rename_vars({"ESA_WORLDCOVER_10M_MAP": "wcover"})
+wcover_dc = wcover_dc.persist()
+wait(wcover_dc)
+wcover_dc
 ```
 
 ## Fuse cube
@@ -280,8 +281,8 @@ hand_dc
 Here we fuse the four data cubes together and filter for the values that have a HAND value of above zero. We can now drop the obit coordinates as well as time slices which contain no land backscattering data.
 
 ```{python}
-flood_dc = xr.merge([sig0_dc, plia_dc, hpar_dc, hand_dc])
-flood_dc = flood_dc.where(flood_dc.hand > 0.001)
+flood_dc = xr.merge([sig0_dc, plia_dc, hpar_dc, wcover_dc])
+flood_dc = flood_dc.where(flood_dc.wcover != 80)
 flood_dc = flood_dc.\
     reset_index("orbit", drop=True).\
     rename({"orbit": "time"}).\
